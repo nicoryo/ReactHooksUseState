@@ -1,31 +1,51 @@
 import React, {useState} from 'react'
 import './App.css'
 
-const Counter = () => {
-  // countの初期値として、1~10までのランダムな数値を生成
-  const intialState = Math.floor(Math.random() * 10) + 1
-  // count という名前の state 変数を宣言、初期値 intialState をセット
-  const [count, setCount] = useState(intialState)
-  // open という名前の state 変数を宣言、初期値 true をセット
-  const [open, setOpen] = useState(true)
-  // toggleの関数を宣言
-  const toggle = () => setOpen(!open)
+// countの初期値として、1~10までのランダムな数値を生成
+const intialState = Math.floor(Math.random() * 10) + 1
 
-  return (
-    <>
-      <button onClick={toggle}>{open ? 'close' : 'open'}</button>
-      <div className={open ? 'isOpen' : 'isClose'}>
-        <p>現在の数字は{count}です</p>
-        {/* setCount()は、countを更新するための関数。countを引数で受け取ることも出来る */}
-        <button onClick={() => setCount(prevState => prevState + 1)}>
-          + 1
+class Counter extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+    // クラスでは、コンストラクタ内で、this.stateの初期値{ count: intialState }をセット
+      count: intialState,
+      // this.stateの初期値{ open: false }をセット
+      open: true
+    }
+  }
+  // toggleメソッドを作成
+  toggle = () => {
+    this.setState({ open: !this.state.open })
+  }
+
+  render() {
+    return (
+      <>
+        <button onClick={this.toggle}>
+          {this.state.open ? 'close' : 'open'}
         </button>
-        <button onClick={() => setCount(count - 1)}>- 1</button>
-        <button onClick={() => setCount(0)}>０</button>
-        <button onClick={() => setCount(intialState)}>最初の数値に戻す</button>
-      </div>
-    </>
-  )
+        <div className={this.state.open ? 'isOpen' : 'isClose'}>
+          <p>現在の数字は {this.state.count} です</p>
+          {/*ボタンをクリックした時に、this.setState()を呼ぶことでcountステートを更新 */}
+          <button
+            onClick={() => this.setState({ count: this.state.count + 1 })}
+          >
+            + 1
+          </button>
+          <button
+            onClick={() => this.setState({ count: this.state.count - 1 })}
+          >
+            - 1
+          </button>
+          <button onClick={() => this.setState({ count: 0 })}>0</button>
+          <button onClick={() => this.setState({ count: intialState })}>
+            最初の数値に戻す
+          </button>
+        </div>
+      </>
+    )
+  }
 }
 
 export default Counter
